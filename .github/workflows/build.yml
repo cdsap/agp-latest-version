@@ -35,7 +35,8 @@ jobs:
         run: ./gradlew ${{ matrix.task }}
 
       # Dexing outputs whose desugar_graph.bin differs across OSes and changes the
-      # :app:app:mergeLibDexDebug cache key.
+      # :app:app:mergeLibDexDebug cache key, plus a layout file to check checkout
+      # line endings (CRLF on Windows).
       - name: Archive dexing outputs
         if: matrix.task == 'assembleDebug'
         uses: actions/upload-artifact@v4
@@ -52,3 +53,4 @@ jobs:
             model/todo-identity/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
             repository/alarm-login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
             repository/status-login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            core/comment/src/main/res/layout/fragment_feature_comment.xml
