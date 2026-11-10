@@ -8,12 +8,13 @@ on:
 
 jobs:
   build:
-    name: Build (${{ matrix.os }})
+    name: ${{ matrix.task }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
+        task: [ assembleDebug, assembleRelease, lintDebug, testDebugUnitTest ]
     env:
       DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
     steps:
@@ -29,6 +30,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Build
+      - name: Run ${{ matrix.task }}
         shell: bash
-        run: ./gradlew assembleDebug
+        run: ./gradlew ${{ matrix.task }}
