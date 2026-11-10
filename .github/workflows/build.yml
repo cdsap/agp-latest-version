@@ -33,3 +33,22 @@ jobs:
       - name: Run ${{ matrix.task }}
         shell: bash
         run: ./gradlew ${{ matrix.task }}
+
+      # Dexing outputs whose desugar_graph.bin differs across OSes and changes the
+      # :app:app:mergeLibDexDebug cache key.
+      - name: Archive dexing outputs
+        if: matrix.task == 'assembleDebug'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dexing-outputs-${{ runner.os }}
+          if-no-files-found: warn
+          path: |
+            core/cart/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            core/login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            core/message/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            core/search/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            core/status/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            model/metric-identity/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            model/todo-identity/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            repository/alarm-login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
+            repository/status-login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
