@@ -43,6 +43,7 @@ jobs:
         with:
           name: dexing-outputs-${{ runner.os }}
           if-no-files-found: warn
+          include-hidden-files: true
           path: |
             core/cart/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
             core/login/build/.transforms/*/transformed/bundleLibRuntimeToDirDebug
