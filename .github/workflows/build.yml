@@ -34,6 +34,21 @@ jobs:
         shell: bash
         run: ./gradlew ${{ matrix.task }}
 
+      # Order in which Files.walk lists the classes that D8 desugars, to compare with
+      # the order of the nests in each module's desugar_graph.bin.
+      - name: Print Files.walk order of dexing inputs
+        if: matrix.task == 'assembleDebug'
+        shell: bash
+        run: |
+          java .github/scripts/WalkOrder.java core/message model/metric-identity repository/status-login | tee walk-order-${{ runner.os }}.txt
+
+      - name: Archive Files.walk order
+        if: matrix.task == 'assembleDebug'
+        uses: actions/upload-artifact@v4
+        with:
+          name: walk-order-${{ runner.os }}
+          path: walk-order-${{ runner.os }}.txt
+
       # Dexing outputs whose desugar_graph.bin differs across OSes and changes the
       # :app:app:mergeLibDexDebug cache key, plus a layout file to check checkout
       # line endings (CRLF on Windows).
